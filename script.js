@@ -78,10 +78,46 @@ scene.add(space)
 
 camera.position.z = 5
 
+
+// PHASE = current phase in animation
+// phase = 1: 
+// And God said, “Let there be lights in the vault of the sky 
+// to separate the day from the night, and let them serve as signs 
+// to mark sacred times, and days and years, and let them be lights
+// in the vault of the sky to give light on the earth.” 
+
+// phase = 2:
+// And it was so.
+
+// phase = 3:
+// ** sun and moon and stars appear ** 
+
+// phase = 4:
+// ** moon rotates through its phases **
+
+// phase = 5:
+// God made two great lights—the greater light to govern the day 
+// and the lesser light to govern the night. He also made the stars.
+
+// phase = 6:
+// God set them in the vault of the sky to give light on the earth,
+// to govern the day and the night, and to separate light from darkness. 
+
+// phase = 7:
+// ** move to view of the earth slowly rotating, sun on one side, moon on other **
+// **  ** 
+
+// And God saw that it was good. 
+
+let phase = 5
+
 function animate() {
     requestAnimationFrame(animate)
-    camera.rotation.y += 0.01
-    moonOrbit.rotation.y += 0.01
+    let fullCircle = Math.PI * 2
+    if (phase == 5) {
+        let done = animatePhase5()
+        if (done) phase = 6
+    }
     // sun.rotation.y += 0.001
     // sun.rotation.x += 0.0001
     renderer.render(scene,camera)
@@ -90,3 +126,13 @@ function animate() {
     // }
 }
 animate()
+
+function animatePhase5() {
+    if (camera.rotation.y < fullCircle) {
+        camera.rotation.y += 0.01
+        moonOrbit.rotation.y += 0.01  
+        return false  
+    } else {
+        return true
+    }
+}
