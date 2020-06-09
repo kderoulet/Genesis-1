@@ -264,8 +264,13 @@ function animatePhase1() {
 
     if (textMesh && font) {
         if (textMesh.material[0].opacity < 1) {
-            textMesh.material[0].opacity += 0.01
-            textMesh.material[1].opacity += 0.01
+            if (textMesh.material[0].opacity < 0.7) {
+                textMesh.material[0].opacity += 0.01
+                textMesh.material[1].opacity += 0.01            
+            } else {
+                textMesh.material[0].opacity += 0.0005
+                textMesh.material[1].opacity += 0.0005   
+            }
         } else {
             return true
         }
@@ -289,27 +294,30 @@ function animatePhase2() {
         return true
     }
 }
-
+// earthPosition.position.z
 function animatePhase3() {
     if (sunMesh.material.opacity == 0) {
-        // ambientLight.intensity = 0
+        ambientLight.intensity = 0
         andItWasSoSpotlight.intensity = 15
         andItWasSoBackground.material.opacity += 0.1
         sunMesh.material.opacity += 0.1
-        textMesh.material[0].opacity -= 0.1
-        textMesh.material[1].opacity -= 0.1
+        textMesh.material[0].opacity -= 0.01
+        textMesh.material[1].opacity -= 0.01
     }
     if (sunMesh.material.opacity < 1) {
         andItWasSoBackground.material.opacity += 0.1
         sunMesh.material.opacity += 0.1
-        textMesh.material[0].opacity -= 0.1
-        textMesh.material[1].opacity -= 0.1
         space.material.opacity += 0.1
     } else if (sunLighting.intensity > 1.25) {
         sunLightingArray.forEach(light => {
             light.intensity -= 0.1
         })
         // andItWasSoSpotlight.intensity -= 0.05
+        if (ambientLight.intensity < 0.75) {
+            ambientLight.intensity += 0.01
+        }
+        textMesh.material[0].opacity -= 0.01
+        textMesh.material[1].opacity -= 0.01
         andItWasSoBackground.material.opacity -= 0.1
     } else {
         andItWasSoSpotlight.intensity = 0
@@ -349,12 +357,16 @@ function animatePhase4() {
     if (moon.material.opacity < 1) {
         moon.material.opacity += 0.1
     } else if (moonOrbit.rotation.y < 0) {
-        moonOrbit.rotation.y += 0.1
+        moonOrbit.rotation.y += 0.01
+        // get camera in earth position so that we see moon from earth's perspective
     } else if (camera.rotation.y < Math.PI * 2) {
-        camera.rotation.y += 0.1
-        moonOrbit.rotation.y += 0.1    
+        camera.rotation.y += 0.01
+        moonOrbit.rotation.y += 0.01
+        if (camera.position.z < moonOrbit.position.z) {
+            camera.position.z += 0.1
+        }
     } else if (moonOrbit.rotation.y < Math.PI * 3) {
-        moonOrbit.rotation.y += 0.1
+        moonOrbit.rotation.y += 0.01
     } else {
         scene.remove(textMesh)
         loadFont('God made two great lights—the greater light to govern the day \n and the lesser light to govern the night. He also made the stars. \n\n\n\nGod set them in the vault of the sky to give light on the earth,\n to govern the day and the night, and to separate light from darkness.')
@@ -370,12 +382,21 @@ function animatePhase5() {
     } else if (textMesh.material[0].opacity == 0) {
         // start increasing opacity, increase ambient light
         ambientLight.intensity = 0.75
-        textMesh.material[0].opacity += 0.1
-        textMesh.material[1].opacity += 0.1
+        textMesh.material[0].opacity += 0.005
+        textMesh.material[1].opacity += 0.005
         // finally bring opacity to 1
     } else if (textMesh.material[0].opacity < 1) {
-        textMesh.material[0].opacity += 0.1
-        textMesh.material[1].opacity += 0.1
+        if (camera.position.z > -10) {
+            camera.position.z -= 0.1
+        }
+
+        if (textMesh.material[0].opacity < 0.8) {
+            textMesh.material[0].opacity += 0.01
+            textMesh.material[1].opacity += 0.01            
+        } else {
+            textMesh.material[0].opacity += 0.0005
+            textMesh.material[1].opacity += 0.0005   
+        }
     } else {
         scene.remove(textMesh)
         return true
@@ -398,16 +419,15 @@ function animatePhase6() {
     if (camera.position.x >= 100 && camera.position.z >= 5 && camera.rotation.y >= Math.PI * 2.25 && itWasGood == false) {
         itWasGood = true
         textMeshY = 60
-        // textMeshZ = camera.position.z -15
-        size = 10        
+        size = 8        
         textMeshRotation = camera.rotation.y       
         loadFont('And God saw that it was good.')
         textMesh.material[0].opacity = 0
         textMesh.material[1].opacity = 0
     } else if (itWasGood) {
         if (textMesh.material[0].opacity < 1) {
-            textMesh.material[0].opacity += 0.1
-            textMesh.material[1].opacity += 0.1
+            textMesh.material[0].opacity += 0.01
+            textMesh.material[1].opacity += 0.01
         }
     }
     earth.rotation.y += 0.001
