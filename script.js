@@ -1,5 +1,5 @@
 let scene = new THREE.Scene()
-let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000)
 let loader = new THREE.TextureLoader()
 let fontLoader = new THREE.FontLoader()
 
@@ -108,7 +108,7 @@ scene.add(earthOrbit)
 
 // SPACE
 // 500 radius seems excessive; not sure on width/height segments)
-let spaceGeometry = new THREE.SphereBufferGeometry(500,100,100)
+let spaceGeometry = new THREE.SphereBufferGeometry(800,100,100)
 let spaceMaterial = new THREE.MeshBasicMaterial({transparent: true, opacity: 0, map: loader.load('2k_stars.jpg', () => console.log('loaded')), side: THREE.BackSide})
 // let spaceMaterial = new THREE.MeshBasicMaterial({color: 0xaa5555, side: THREE.BackSide})
 let space = new THREE.Mesh(spaceGeometry, spaceMaterial)
@@ -321,6 +321,7 @@ function animatePhase3() {
         andItWasSoBackground.material.opacity -= 0.1
     } else {
         andItWasSoSpotlight.intensity = 0
+        scene.remove(andItWasSoBackground)
         return true
     }
     // ambientLight.color = 0x000000
@@ -369,14 +370,14 @@ function animatePhase4() {
         moonOrbit.rotation.y += 0.01
     } else {
         scene.remove(textMesh)
-        loadFont('God made two great lights—the greater light to govern the day \n and the lesser light to govern the night. He also made the stars. \n\n\n\nGod set them in the vault of the sky to give light on the earth,\n to govern the day and the night, and to separate light from darkness.')
+        loadFont('God made two great lights—the greater light to govern the day \n and the lesser light to govern the night. He also made the stars. \n\n\n\n\n\nGod set them in the vault of the sky to give light on the earth,\n to govern the day and the night, and to separate light from darkness.')
         return true
     }
 }
 
 function animatePhase5() {
     // get textMesh into proper y position
-    if (textMesh.position.y < 6) {
+    if (textMesh.position.y < 8) {
         textMesh.position.y += 0.1
         // next make text non-opaque
     } else if (textMesh.material[0].opacity == 0) {
@@ -408,10 +409,10 @@ function animatePhase6() {
         camera.rotation.y += 0.01
     }
     if (camera.position.z < 5) {
-        camera.position.z += 0.1
+        camera.position.z += 0.05
     }
     if (camera.position.x < 100) {
-        camera.position.x += 0.5
+        camera.position.x += 0.25
     }
     if (earth.material.opacity < 1) {
         earth.material.opacity += 1
